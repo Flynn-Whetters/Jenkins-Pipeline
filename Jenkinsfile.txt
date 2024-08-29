@@ -5,43 +5,36 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running Unit and Integration Tests...'
-                
             }
         }
         stage('Code Analysis') {
             steps {
                 echo 'Performing Code Analysis...'
-                
             }
         }
         stage('Security Scan') {
             steps {
                 echo 'Performing Security Scan...'
-                
             }
         }
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging...'
-                
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running Integration Tests on Staging...'
-                
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production...'
-                
             }
         }
     }
@@ -51,10 +44,13 @@ pipeline {
             echo 'Pipeline finished.'
         }
         failure {
-            mail to: 'whettersjf@gmail.com',
-                 subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
-                 body: "Pipeline failed. Check Jenkins for more details.",
-                 attachLog: true
+            script {
+                // Send email with the log as an attachment
+                def log = currentBuild.rawBuild.getLog(100).join('\n')
+                mail to: 'whettersjf@gmail.com',
+                     subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
+                     body: "Pipeline failed. Check Jenkins for more details.\n\nLog:\n${log}"
+            }
         }
         success {
             mail to: 'whettersjf@gmail.com',
