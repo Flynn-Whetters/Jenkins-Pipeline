@@ -45,4 +45,21 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        failure {
+            mail to: 'whettersjf@gmail.com',
+                 subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
+                 body: "Pipeline failed. Check Jenkins for more details.",
+                 attachLog: true
+        }
+        success {
+            mail to: 'whettersjf@gmail.com',
+                 subject: "Pipeline Succeeded: ${currentBuild.fullDisplayName}",
+                 body: "Pipeline succeeded. All stages completed successfully."
+        }
+    }
 }
